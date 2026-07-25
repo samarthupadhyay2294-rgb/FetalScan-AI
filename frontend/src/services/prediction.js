@@ -1,4 +1,8 @@
 import api from './api';
+import API_BASE from '../utils/constants';
+
+const API_BASE_URL = API_BASE.replace(/\/$/, '');
+const BACKEND_ORIGIN = API_BASE_URL.startsWith('http') ? API_BASE_URL.replace(/\/api$/, '') : '';
 
 export async function runPrediction(file, patientId = '', gestationalAge = '') {
   const form = new FormData();
@@ -27,12 +31,14 @@ export async function fetchReferenceRange(ga) {
 }
 
 export function getDownloadUrl(id) {
-  return `/api/download/${id}`;
+  return BACKEND_ORIGIN ? `${BACKEND_ORIGIN}/download/${id}` : `/download/${id}`;
 }
 
 export function resolveAssetUrl(path) {
   if (!path) return '';
   if (path.startsWith('http')) return path;
-  if (path.startsWith('/outputs')) return path;
-  return `/api${path.startsWith('/') ? '' : '/'}${path}`;
+  if (path.startsWith('/outputs')) {
+    return BACKEND_ORIGIN ? `${BACKEND_ORIGIN}${path}` : path;
+  }
+  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 }

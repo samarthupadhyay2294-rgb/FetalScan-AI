@@ -1,4 +1,7 @@
-export const API_BASE = import.meta.env.VITE_API_BASE || '/api';
+const rawApiBase = import.meta.env.VITE_API_BASE || '/api';
+export const API_BASE = rawApiBase.startsWith('http')
+  ? rawApiBase.replace(/\/api\/?$/, '')
+  : rawApiBase;
 
 export const ROUTES = {
   HOME: '/',

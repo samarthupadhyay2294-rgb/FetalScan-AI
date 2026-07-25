@@ -61,6 +61,12 @@ npm run dev
 
 App: http://127.0.0.1:5173
 
+When deploying the frontend separately from the backend, set `VITE_API_BASE` to the backend origin in your deployment environment. For example:
+
+```env
+VITE_API_BASE=https://fetalscan-ai.onrender.com
+```
+
 ---
 
 ## API Endpoints
