@@ -1,6 +1,7 @@
-"""Singleton HRNet model loader."""
+"""Singleton HRNet model loader with lazy loading and thread-safety."""
 
 from pathlib import Path
+import threading
 
 import torch
 
@@ -10,6 +11,7 @@ from backend.utils.logger import logger
 
 _model = None
 _device = None
+_model_lock = threading.Lock()
 
 
 def get_device() -> torch.device:
@@ -25,25 +27,31 @@ def load_model(weights_path: Path | None = None) -> SimpleHRNetLandmark:
     if _model is not None:
         return _model
 
-    settings = get_settings()
-    path = weights_path or settings.weights_path
-    if not path.exists():
-        raise FileNotFoundError(
-            f"Model weights not found at {path}. "
-            "Place best_hrnet.pth in backend/weights/"
-        )
+    with _model_lock:
+        # Double-check pattern: another thread may have loaded it while we were waiting for the lock
+        if _model is not None:
+            return _model
 
-    device = get_device()
-    model = SimpleHRNetLandmark(num_landmarks=4, pretrained=False)
-    try:
-        state = torch.load(path, map_location=device, weights_only=True)
-    except TypeError:
-        state = torch.load(path, map_location=device)
-    model.load_state_dict(state)
-    model.to(device)
-    model.eval()
-    _model = model
-    logger.info("HRNet model loaded from %s", path)
+        settings = get_settings()
+        path = weights_path or settings.weights_path
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Model weights not found at {path}. "
+                "Place best_hrnet.pth in backend/weights/"
+            )
+
+        device = get_device()
+        model = SimpleHRNetLandmark(num_landmarks=4, pretrained=False)
+        try:
+            state = torch.load(path, map_location=device, weights_only=True)
+        except TypeError:
+            state = torch.load(path, map_location=device)
+        model.load_state_dict(state)
+        model.to(device)
+        model.eval()
+        _model = model
+        logger.info("HRNet model loaded from %s", path)
+
     return _model
 
 
