@@ -16,7 +16,6 @@ from fastapi.staticfiles import StaticFiles
 from backend.api import health, history, predict, reference, report, upload
 from backend.config import get_settings
 from backend.database.schema import init_db
-from backend.inference.model_loader import load_model
 from backend.utils.helpers import ensure_dir
 from backend.utils.logger import logger
 
@@ -30,11 +29,7 @@ async def lifespan(app: FastAPI):
     ensure_dir(settings.outputs_dir / "csv")
     ensure_dir(settings.outputs_dir / "json")
     init_db()
-    try:
-        load_model()
-        logger.info("Model preloaded successfully")
-    except FileNotFoundError as exc:
-        logger.warning("Model not loaded at startup: %s", exc)
+    logger.info("Application startup complete (model will load lazily on first /predict request)")
     yield
 
 
