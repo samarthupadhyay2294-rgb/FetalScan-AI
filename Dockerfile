@@ -18,7 +18,7 @@ RUN if [ -z "$MODEL_WEIGHTS_URL" ]; then \
         exit 1; \
     fi && \
     mkdir -p /app/backend/weights && \
-    curl -fsSL "$MODEL_WEIGHTS_URL" -o /app/backend/weights/best_hrnet.pth || \
+    curl -fsSL -L --max-time 300 --retry 3 --retry-delay 5 "$MODEL_WEIGHTS_URL" -o /app/backend/weights/best_hrnet.pth || \
     (echo "ERROR: Failed to download model weights from $MODEL_WEIGHTS_URL"; exit 1)
 
 ENV OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
