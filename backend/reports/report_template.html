@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FetalScan AI Report</title>
+  <link rel="stylesheet" href="report_style.css" />
+</head>
+<body>
+  <header class="report-header">
+    <h1>{{ hospital_name }}</h1>
+    <p>{{ hospital_address }}</p>
+  </header>
+  <section>
+    <h2>Fetal Ultrasound Biometric Report</h2>
+    <table>
+      <tr><td>Report ID</td><td>{{ report_id }}</td></tr>
+      <tr><td>Patient ID</td><td>{{ patient_id }}</td></tr>
+      <tr><td>BPD</td><td>{{ bpd_mm }} mm</td></tr>
+      <tr><td>OFD</td><td>{{ ofd_mm }} mm</td></tr>
+      <tr><td>Cephalic Index</td><td>{{ cephalic_index }}%</td></tr>
+      <tr><td>Screening</td><td>{{ disease }}</td></tr>
+    </table>
+  </section>
+  <footer><em>{{ disclaimer }}</em></footer>
+</body>
+</html>

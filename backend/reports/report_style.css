@@ -1,0 +1,8 @@
+body { font-family: 'Segoe UI', Arial, sans-serif; color: #1e293b; margin: 2rem; }
+.report-header { border-bottom: 3px solid #2563EB; padding-bottom: 1rem; }
+h1 { color: #2563EB; margin: 0; }
+h2 { color: #0f172a; }
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+td { padding: 0.5rem; border: 1px solid #e2e8f0; }
+td:first-child { background: #eff6ff; font-weight: 600; width: 35%; }
+footer { margin-top: 2rem; font-size: 0.85rem; color: #64748b; }

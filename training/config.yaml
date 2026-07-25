@@ -1,0 +1,9 @@
+# Training config reference
+img_size: 512
+heatmap_size: 128
+sigma: 2
+landmarks: 4
+model: hrnet_w32
+batch_size: 8
+epochs: 50
+lr: 0.0001
