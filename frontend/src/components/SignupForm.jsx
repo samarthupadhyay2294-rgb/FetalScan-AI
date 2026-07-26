@@ -55,7 +55,7 @@ export default function SignupForm() {
       const res = await signUp({ fullName, email, password });
 
       setToastType('success');
-      if (res?.session) {
+      if (res?.session || res?.user) {
         setToastMessage('Account created successfully!');
         setTimeout(() => {
           navigate('/dashboard');

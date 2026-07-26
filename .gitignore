@@ -24,7 +24,7 @@ backend/outputs/**/*
 !backend/outputs/**/.gitkeep
 backend/logs/*
 !backend/logs/.gitkeep
-backend/database/*.db
+*.db
 
 # IDE
 .idea/

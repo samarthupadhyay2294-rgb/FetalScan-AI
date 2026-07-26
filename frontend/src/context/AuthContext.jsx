@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
       const data = await authService.signUp(credentials);
       if (data?.user) {
         setUser(data.user);
-        setSession(data.session);
+        setSession(data.session || data);
         await fetchProfile(data.user.id);
       }
       return data;
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
       const data = await authService.login(credentials);
       if (data?.user) {
         setUser(data.user);
-        setSession(data.session);
+        setSession(data.session || data);
         await fetchProfile(data.user.id);
       }
       return data;

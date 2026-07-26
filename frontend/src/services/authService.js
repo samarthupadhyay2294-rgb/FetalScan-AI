@@ -108,7 +108,7 @@ export const authService = {
     };
 
     saveLocalSession(session);
-    return session;
+    return { user: session.user, session };
   },
 
   /**
@@ -165,7 +165,7 @@ export const authService = {
     };
 
     saveLocalSession(session);
-    return session;
+    return { user: session.user, session };
   },
 
   /**

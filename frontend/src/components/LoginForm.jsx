@@ -23,7 +23,7 @@ export default function LoginForm() {
     e.preventDefault();
 
     const emailErr = validateEmail(email);
-    const passErr = validatePassword(password);
+    const passErr = !password ? 'Password is required.' : '';
 
     if (emailErr || passErr) {
       setErrors({
