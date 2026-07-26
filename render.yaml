@@ -10,8 +10,7 @@ services:
     healthCheckPath: /health
     envVars:
       - key: CORS_ORIGINS
-        sync: false
-        # Set to your frontend URL, e.g. https://fetalscan-web.onrender.com
+        value: https://fetalscan-web.onrender.com
       - key: CORS_ORIGIN_REGEX
         value: https://.*\.onrender\.com
       - key: MODEL_WEIGHTS_PATH
@@ -26,8 +25,7 @@ services:
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_BASE
-        sync: false
-        # REQUIRED: same origin as fetalscan-api, e.g. https://fetalscan-api.onrender.com
+        value: https://fetalscan-api.onrender.com
     routes:
       - type: rewrite
         source: /*
