@@ -12,7 +12,7 @@ RUN grep -v "^torch\|^torchvision\|^pytest\|^pytest-asyncio" requirements.txt > 
 
 COPY backend ./backend
 
-ARG MODEL_WEIGHTS_URL=https://github.com/samarthupadhyay2294-rgb/FetalScan-AI/releases/download/weights-v1/best_hrnet.pth
+ARG MODEL_WEIGHTS_URL
 RUN mkdir -p /app/backend/weights && \
     if [ -f /app/backend/weights/best_hrnet.pth ]; then \
         echo "Using local model weights"; \
