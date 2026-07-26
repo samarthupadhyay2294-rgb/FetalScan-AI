@@ -3,7 +3,7 @@
 
 services:
   - type: web
-    name: fetalscan-api
+    name: fetalscan-ai
     runtime: docker
     dockerfilePath: ./Dockerfile
     plan: free
@@ -13,7 +13,7 @@ services:
       MODEL_WEIGHTS_URL: https://github.com/samarthupadhyay2294-rgb/FetalScan-AI/releases/download/weight/best_hrnet.pth
     envVars:
       - key: CORS_ORIGINS
-        value: https://fetalscan-web.onrender.com
+        value: https://fetalscan-ai-1.onrender.com
       - key: CORS_ORIGIN_REGEX
         value: https://.*\.onrender\.com
       - key: MODEL_WEIGHTS_PATH
@@ -22,13 +22,13 @@ services:
         value: sqlite:///./backend/database/fetalscan.db
 
   - type: web
-    name: fetalscan-web
+    name: fetalscan-ai-1
     runtime: static
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     envVars:
       - key: VITE_API_BASE
-        value: https://fetalscan-api.onrender.com
+        value: https://fetalscan-ai.onrender.com
     routes:
       - type: rewrite
         source: /*
