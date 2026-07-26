@@ -18,10 +18,9 @@ RUN mkdir -p /app/backend/weights && \
         echo "Using local model weights"; \
     elif [ -n "$MODEL_WEIGHTS_URL" ]; then \
         curl -fsSL -L --max-time 300 --retry 3 --retry-delay 5 "$MODEL_WEIGHTS_URL" -o /app/backend/weights/best_hrnet.pth || \
-        (echo "ERROR: Failed to download model weights from $MODEL_WEIGHTS_URL"; exit 1); \
+        echo "WARNING: Failed to download model weights from $MODEL_WEIGHTS_URL - will download at runtime"; \
     else \
-        echo "ERROR: MODEL_WEIGHTS_URL build arg is required when local weights are not present"; \
-        exit 1; \
+        echo "WARNING: No model weights provided - will download at runtime if URL is set"; \
     fi
 
 ENV OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1

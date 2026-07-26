@@ -8,6 +8,9 @@ services:
     dockerfilePath: ./Dockerfile
     plan: free
     healthCheckPath: /health
+    dockerContext: .
+    dockerBuildArgs:
+      MODEL_WEIGHTS_URL: https://github.com/samarthupadhyay2294-rgb/FetalScan-AI/releases/download/weight/best_hrnet.pth
     envVars:
       - key: CORS_ORIGINS
         value: https://fetalscan-web.onrender.com
