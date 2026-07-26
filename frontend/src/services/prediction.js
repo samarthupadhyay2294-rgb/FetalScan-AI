@@ -1,8 +1,5 @@
 import api from './api';
-import API_BASE from '../utils/constants';
-
-const API_BASE_URL = API_BASE.replace(/\/$/, '');
-const BACKEND_ORIGIN = API_BASE_URL.startsWith('http') ? API_BASE_URL.replace(/\/api$/, '') : '';
+import { API_BASE, BACKEND_ORIGIN } from '../utils/constants';
 
 export async function runPrediction(file, patientId = '', gestationalAge = '') {
   const form = new FormData();
@@ -31,14 +28,21 @@ export async function fetchReferenceRange(ga) {
 }
 
 export function getDownloadUrl(id) {
-  return BACKEND_ORIGIN ? `${BACKEND_ORIGIN}/download/${id}` : `/download/${id}`;
+  if (!BACKEND_ORIGIN) {
+    throw new Error('Backend URL is not configured. Set VITE_API_BASE on Render.');
+  }
+  return `${BACKEND_ORIGIN}/download/${id}`;
 }
 
 export function resolveAssetUrl(path) {
   if (!path) return '';
   if (path.startsWith('http')) return path;
-  if (path.startsWith('/outputs')) {
-    return BACKEND_ORIGIN ? `${BACKEND_ORIGIN}${path}` : path;
+  if (!BACKEND_ORIGIN) {
+    console.warn('[FetalScan AI] BACKEND_ORIGIN missing; asset URL may 404:', path);
+    return path;
   }
-  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
+  if (path.startsWith('/outputs') || path.startsWith('/download')) {
+    return `${BACKEND_ORIGIN}${path}`;
+  }
+  return `${BACKEND_ORIGIN}${path.startsWith('/') ? path : `/${path}`}`;
 }

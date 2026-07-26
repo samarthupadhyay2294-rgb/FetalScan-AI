@@ -24,6 +24,8 @@ class Settings(BaseSettings):
     backend_host: str = "0.0.0.0"
     backend_port: int = 8000
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
+    # Optional regex for preview/staging hosts (e.g. https://*.onrender.com)
+    cors_origin_regex: str = r"https://.*\.onrender\.com"
 
     model_weights_path: str = "backend/weights/best_hrnet.pth"
     img_size: int = 512

@@ -41,29 +41,35 @@ app = FastAPI(
 )
 
 settings = get_settings()
+_cors_kwargs = {
+    "allow_credentials": True,
+    "allow_methods": ["*"],
+    "allow_headers": ["*"],
+}
+if settings.cors_origin_regex:
+    _cors_kwargs["allow_origin_regex"] = settings.cors_origin_regex
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    **_cors_kwargs,
 )
 
-# Standard endpoints
-app.include_router(health.router)
-app.include_router(upload.router)
-app.include_router(predict.router)
-app.include_router(report.router)
-app.include_router(history.router)
-app.include_router(reference.router)
 
-# v1 versioned aliases
-app.include_router(health.router, prefix="/v1")
-app.include_router(upload.router, prefix="/v1")
-app.include_router(predict.router, prefix="/v1")
-app.include_router(report.router, prefix="/v1")
-app.include_router(history.router, prefix="/v1")
-app.include_router(reference.router, prefix="/v1")
+def _register_api_routes(prefix: str = "") -> None:
+    """Mount all routers under an optional prefix (e.g. /api, /v1)."""
+    app.include_router(health.router, prefix=prefix)
+    app.include_router(upload.router, prefix=prefix)
+    app.include_router(predict.router, prefix=prefix)
+    app.include_router(report.router, prefix=prefix)
+    app.include_router(history.router, prefix=prefix)
+    app.include_router(reference.router, prefix=prefix)
+
+
+# Root routes: POST /predict, POST /upload, GET /history, ...
+_register_api_routes()
+# Aliases for proxies / clients that prefix with /api or /v1
+_register_api_routes("/api")
+_register_api_routes("/v1")
 
 # Serve uploaded and output images
 uploads_path = settings.uploads_dir

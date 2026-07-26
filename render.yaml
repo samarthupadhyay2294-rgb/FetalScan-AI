@@ -1,0 +1,34 @@
+# Render Blueprint — deploy backend + frontend as separate services
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: fetalscan-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: CORS_ORIGINS
+        sync: false
+        # Set to your frontend URL, e.g. https://fetalscan-web.onrender.com
+      - key: CORS_ORIGIN_REGEX
+        value: https://.*\.onrender\.com
+      - key: MODEL_WEIGHTS_PATH
+        value: backend/weights/best_hrnet.pth
+      - key: DATABASE_URL
+        value: sqlite:///./backend/database/fetalscan.db
+
+  - type: web
+    name: fetalscan-web
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_BASE
+        sync: false
+        # REQUIRED: same origin as fetalscan-api, e.g. https://fetalscan-api.onrender.com
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
